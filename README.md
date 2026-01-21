@@ -4,7 +4,7 @@ This repository contains the maintained source code of **VuTeCo** (VUlnerability
 
 Please, see the [MSR'26 paper](https://arxiv.org/abs/2502.03365) for more details about its inner workings.
 
-If you are looking for MSR'26 version of VuTeCo, please see the [Zenodo package](https://doi.org/10.5281/zenodo.18258566).
+If you are looking for the MSR'26 version of VuTeCo, please see the [Zenodo package](https://doi.org/10.5281/zenodo.18258566).
 
 If you are looking for the dataset **Test4Vul**, containing some manually-validated tests found in the wild by VuTeCo, please see https://github.com/tuhh-softsec/test4vul.
 
@@ -19,8 +19,8 @@ To run VuTeCo, you need the following requirements:
 VuTeCo has been used on a Linux-based OS so far. Nevertheless, the scripts were implemented to be OS-agnostic, so they should also work on MacOS or Windows.
 
 **NOTES**:
-- The following commands assumes that `python` is the default alias for the selected Python installation. It can be changed to `python3` without issues.
-- The `XX` indicate the acronym of an AI model. See [below](#models) for datails.
+- The following commands assume that `python` is the default alias for the selected Python installation. It can be changed to `python3` without issues.
+- The `XX` indicates the acronym of an AI model. See [below](#models) for details.
 - The meaning of all command-line arguments can be found in the file `scripts/common/cli_args.py`.
 
 # Set Up
@@ -56,7 +56,7 @@ python -m pip uninstall unsloth unsloth-zoo -y && python -m pip install --upgrad
 ```
 
 Ensure to have additional space to host the packages downloaded from PyPI (roughly 7 GB).
-- This set up will be improved in the future to avoid installing unneeded dependencies if one wants to use VuTeCo without the training-evaluation pipeline.
+- This setup will be improved in the future to avoid installing unneeded dependencies if one wants to use VuTeCo without the training-evaluation pipeline.
 
 # Running VuTeCo
 
@@ -68,9 +68,9 @@ VuTeCo can be run in two modes:
 
 The user can interpret the predicted probabilities freely (the tool per se does not classify, but only return probabilities). The recommended threshold for the positive classifications is the default 0.5.
 
-The input projects to analyze input can be supplied through the command-line argument `-i` (see [this example](`examples/input.csv`) as a guidance). The output are returned as JSON files, one per project analyzed, and put in the directory indicated by the command-line argument `-o`. Make sure the directory does not exist or it is empty so not to clash with your existing files.
+The input projects to analyze can be supplied through the command-line argument `-i` (see [this example](`examples/input.csv`) as guidance). The output is returned as JSON files, one per project analyzed, and put in the directory indicated by the command-line argument `-o`. Make sure the directory does not exist or is empty so it does not clash with your existing files.
 
-The AI model to use can be set with the argument `-t`. The list of supported model is reported [below](#models).
+The AI model to use can be set with the argument `-t`. The list of supported models is reported [below](#models).
 - In Finding mode, the recommended model is `uxc` (UniXcoder);
 - In Matching mode, the recommended model is `dsc` (Deep Seek Coder).
 
@@ -90,7 +90,7 @@ python vuteco.py -i <PROJECT-LIST> -o <OUTPUT-DIRECTORY> -r from-file --no-vuln-
 
 ## Troubleshooting
 
-VuTeCo automatically downloads the Finding and Matching models' weights from Hugging Face (https://huggingface.co/emaiannone/models). However, should this automatic download encounter issues, you can solve this by:
+VuTeCo automatically downloads the weights for the Finding and Matching models from Hugging Face (https://huggingface.co/emaiannone/models). However, should this automatic download encounter issues, you can solve this by:
 1. Manually download the model from the Hugging Face web pages.
 2. Place the Finding models under `<ANY-DIR>/<MODEL-NAME>/final`; place the Matching models under `<ANY-DIR>/<MODEL-NAME>/e2e/final` (this weird path naming will be solved in the future).
 3. Add this argument to the above commands: `--model-dir <ANY-DIR>`.
@@ -110,7 +110,7 @@ VuTeCo automatically downloads the Finding and Matching models' weights from Hug
 
 # Future Work
 
-This repository is under improvement. These are some activities that will be done to improve the usability of VuTeCo and the clarify of this REAMDE:
+This repository is under improvement. These are some activities that will be done to improve the usability of VuTeCo and the clarity of this README:
 
 - Separate VuTeCo (the tool used for inference) from the training-evaluation pipeline (for exporting the models).
 - Provide the Docker images
