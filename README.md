@@ -1,4 +1,4 @@
-# VuTeCo
+# VuTeCo - AI-driven Collector of Vulnerability-witnessing Tests
 
 This repository contains the maintained source code of **VuTeCo** (VUlnerability TEst COllector), which can scan Java Git repositories to (1) find security-related test cases and (2) match them with CVE identifiers.
 
@@ -72,7 +72,7 @@ The input projects to analyze can be supplied through the command-line argument 
 
 The AI model to use can be set with the argument `-t`. The list of supported models is reported [below](#models).
 - In Finding mode, the recommended model is `uxc` (UniXcoder);
-- In Matching mode, the recommended model is `dsc` (Deep Seek Coder).
+- In Matching mode, the recommended model is `dsc` (DeepSeek Coder).
 
 ## Sample Usages
 
@@ -108,12 +108,52 @@ VuTeCo automatically downloads the weights for the Finding and Matching models f
 | dsc | DeepSeek Coder |
 | qc | Qwen Coder |
 
+# How to Extend VuTeCo with a new Model/Technique
+
+This guide explains how to add a new model or technique to **VuTeCo**. This guide will be further improved in the future.
+
+Assume you want to add a technique named `MyPowerfulTechnique`, with the acronym `mpt`.
+
+## 1. Update `constants.py`
+
+1. **Register the technique for training and evaluation**
+   Add the name `mpt` to:
+   - `FinderName` if it is for the *Finding* task, or
+   - `End2EndName` if it is for the *Matching* task.
+   
+   Follow the naming conventions used by existing entries (recommended, but not mandatory), e.g., `MYPOWERFULTECHNIQUE_FND = "mpt-fnd"` or `MYPOWERFULTECHNIQUE_E2E = "mpt-e2e"`.
+
+2. **Register the technique for inference**
+   Add the technique name to `TechniqueName`. Again, following the existing naming patterns where possible, e.g., `MYPOWERFULTECHNIQUE = "mpt"`
+
+## 2. Implement the core of your technique
+
+Create the class that implements your technique under the `modeling` module, following the style of the existing files.
+
+This is where you define the specific behavior of your technique. If you want it to behave like the existing models in VuTeCo, ensure to **inherit from the existing superclasses** (e.g., `NeuralNetworkFinder`, `LanguageModelFinder`, `NeuralNetworkE2E`, `LanguageModelE2E`). If so, place the class in the appropriate file. For example, an LLM for Matching should typically go in `modeling_lm_e2e.py`. Follow existing naming conventions where possible. Otherwise, you have to define the custom behavior on your own, possibly in a new file if desired.
+
+## 3. Update `cli_constants.py`
+
+1. **Define an evaluation output directory**
+   Create a new constant pointing to the directory where evaluation results will be written.
+   Follow the naming convention used by existing constants, e.g., `MPT_FND_EXPORT_EVAL_DIRPAT = os.path.join(EVALUATED_MODEL_DIRPATH, FinderName.MYPOWERFULTECHNIQUE_FND.value)`.
+
+2. **Map the approach to its class and evaluation directory**
+   Add an entry to the appropriate `XYZ_MODELS` dictionary, depending on the technique type. For example:
+   - `NN_FINDER_MODELS` for neural-network–based Finding approaches
+   - `LM_E2E_MODELS` for LLM-based Matching approaches
+
+3. **Map the approach to its inference name**
+   Add an entry to the appropriate `VUTECO_XYZ` dictionary to associate the training/evaluation name with the inference name.
+
 # Future Work
 
 This repository is under improvement. These are some activities that will be done to improve the usability of VuTeCo and the clarity of this README:
 
-- Separate VuTeCo (the tool used for inference) from the training-evaluation pipeline (for exporting the models).
-- Provide the Docker images
+- Adjust the names with the ones used in the MSR'26 paper (e.g., End2End becomes Matcher)
+- Explain better how VuTeCo can be extended (possibly simplifying the code as well).
+- Separate VuTeCo (the tool used for inference) from the training-evaluation pipeline (for exporting the models). This also includes separating the required dependencies.
+- Clean up dependencies and provide the Docker images to run VuTeCo out of the box.
 - Handle *testng* test cases, other than JUnit.
 
 Please, open new issues for suggestions and bug fixes! This is very appreciated :)
