@@ -8,8 +8,8 @@ from cli_constants import (LM_E2E_MODELS, LM_FINDER_MODELS, LM_FL_MODELS,
                            VUTECO_LM_E2E_TECHNIQUES, VUTECO_LM_FL_TECHNIQUES,
                            VUTECO_LM_FND_TECHNIQUES, VUTECO_NN_E2E_TECHNIQUES,
                            VUTECO_NN_FL_TECHNIQUES, VUTECO_NN_FND_TECHNIQUES)
-from common.constants import FINAL, REMOTE_BASEPATH, End2EndName, FinderName, TechniqueName
-from common.utils_mining import make_hash, prepend_text, chunk_list
+from common.constants import FINAL, End2EndName, FinderName, TechniqueName
+from common.utils_mining import chunk_list, make_hash, prepend_text
 from modeling.modeling_fix import FixCommitModel
 from modeling.modeling_fl import FinderLinkerWrapper
 from modeling.modeling_grep_fnd import GrepFinder
@@ -66,9 +66,9 @@ class VutecoTechnique(ABC):
         self.model = model
 
     def __call__(self, tests: list[TestCase], description: str = None, cwes: str = None, *args, **kwargs) -> dict[TestCase, float]:
-        #if description is None:
+        # if description is None:
         #    print(f"Going to find witnessing tests using {self.name}")
-        #else:
+        # else:
         #    print(f"Going to match witnessing tests and vulnerability using {self.name}")
         batched_inference = kwargs.get("batched_inference", False)
         try:
@@ -98,7 +98,7 @@ class VutecoNeuralNetworkFinder(VutecoTechnique):
         model_name = VUTECO_NN_FND_TECHNIQUES[tech_name]
         model_class, _ = NN_FINDER_MODELS[model_name]
         # TODO Improve management of where to export models
-        model_path = os.path.join(model_dir, model_name, FINAL) if local_load else REMOTE_BASEPATH.format(model=model_name)
+        model_path = os.path.join(model_dir, model_name, FINAL) if local_load else model_dir.format(model=model_name)
         super().__init__(tech_name, model_class.from_pretrained(model_path))
 
 
@@ -107,7 +107,7 @@ class VutecoLanguageModelFinder(VutecoTechnique):
         model_name = VUTECO_LM_FND_TECHNIQUES[tech_name]
         model_class, _ = LM_FINDER_MODELS[model_name]
         # TODO Improve management of where to export models
-        model_path = os.path.join(model_dir, model_name, FINAL) if local_load else REMOTE_BASEPATH.format(model=model_name)
+        model_path = os.path.join(model_dir, model_name, FINAL) if local_load else model_dir.format(model=model_name)
         super().__init__(tech_name, model_class.from_pretrained(model_path))
 
 
@@ -128,7 +128,7 @@ class VutecoNeuralNetworkE2E(VutecoTechnique):
         model_name = VUTECO_NN_E2E_TECHNIQUES[tech_name]
         model_class, _ = NN_E2E_MODELS[model_name]
         # TODO Improve management of where to export models
-        model_path = os.path.join(model_dir, model_name, "e2e") if local_load else REMOTE_BASEPATH.format(model=model_name)
+        model_path = os.path.join(model_dir, model_name, "e2e") if local_load else model_dir.format(model=model_name)
         super().__init__(tech_name, model_class.from_pretrained(model_path))
 
 
@@ -137,7 +137,7 @@ class VutecoLanguageModelE2E(VutecoTechnique):
         model_name = VUTECO_LM_E2E_TECHNIQUES[tech_name]
         model_class, _ = LM_E2E_MODELS[model_name]
         # TODO Improve management of where to export models
-        model_path = os.path.join(model_dir, model_name, "e2e", FINAL) if local_load else REMOTE_BASEPATH.format(model=model_name)
+        model_path = os.path.join(model_dir, model_name, "e2e", FINAL) if local_load else model_dir.format(model=model_name)
         super().__init__(tech_name, model_class.from_pretrained(model_path))
 
 
@@ -146,8 +146,8 @@ class VutecoNeuralNetworkFinderLinker(VutecoTechnique):
         model_name = VUTECO_NN_FL_TECHNIQUES[tech_name]
         fnd_model_class, lnk_model_class = NN_FL_MODELS[model_name]
         # TODO Improve management of where to export models
-        fnd_model_path = os.path.join(model_dir, model_name.replace("fl", "fnd"), FINAL) if local_load else REMOTE_BASEPATH.format(model=model_name)
-        lnk_model_path = os.path.join(model_dir, model_name.replace("fl", "lnk"), FINAL) if local_load else REMOTE_BASEPATH.format(model=model_name)
+        fnd_model_path = os.path.join(model_dir, model_name.replace("fl", "fnd"), FINAL) if local_load else model_dir.format(model=model_name)
+        lnk_model_path = os.path.join(model_dir, model_name.replace("fl", "lnk"), FINAL) if local_load else model_dir.format(model=model_name)
         fnd_model = fnd_model_class.from_pretrained(fnd_model_path)
         lnk_model = lnk_model_class.from_pretrained(lnk_model_path)
         super().__init__(tech_name, FinderLinkerWrapper(fnd_model=fnd_model, lnk_model=lnk_model))
@@ -158,8 +158,8 @@ class VutecoLanguageModelFinderLinker(VutecoTechnique):
         model_name = VUTECO_LM_FL_TECHNIQUES[tech_name]
         fnd_model_class, lnk_model_class = LM_FL_MODELS[model_name]
         # TODO Improve management of where to export models
-        fnd_model_path = os.path.join(model_dir, model_name.replace("fl", "fnd"), FINAL) if local_load else REMOTE_BASEPATH.format(model=model_name)
-        lnk_model_path = os.path.join(model_dir, model_name.replace("fl", "lnk"), FINAL) if local_load else REMOTE_BASEPATH.format(model=model_name)
+        fnd_model_path = os.path.join(model_dir, model_name.replace("fl", "fnd"), FINAL) if local_load else model_dir.format(model=model_name)
+        lnk_model_path = os.path.join(model_dir, model_name.replace("fl", "lnk"), FINAL) if local_load else model_dir.format(model=model_name)
         fnd_model = fnd_model_class.from_pretrained(fnd_model_path)
         lnk_model = lnk_model_class.from_pretrained(lnk_model_path)
         super().__init__(tech_name, FinderLinkerWrapper(fnd_model=fnd_model, lnk_model=lnk_model))
