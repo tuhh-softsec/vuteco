@@ -40,7 +40,31 @@ VuTeCo has been tested on a Linux-based OS so far. Nevertheless, the scripts wer
 Ensure to have sufficient space to host the packages downloaded from PyPI (roughly 7 GB).
 - This setup will be improved in the future to avoid installing unneeded dependencies if one wants to use VuTeCo without the training-evaluation pipeline.
 
-Move into the `vuteco/` directory:
+## Install as a Package
+
+VuTeCo can be installed in any Python project as a package if it has `pyproject.toml`. If so, add the following line in the dependency list:
+
+```yaml
+vuteco = { git = "https://github.com/tuhh-softsec/vuteco.git", subdirectory = "vuteco" }
+```
+
+Alternatively, you can add the following line in the `requirements.txt` file:
+
+```yaml
+vuteco @ git+https://github.com/tuhh-softsec/vuteco.git#subdirectory=vuteco
+```
+
+If you want to install it directly with `pip`:
+
+```sh
+pip install git+https://github.com/tuhh-softsec/vuteco.git#subdirectory=vuteco
+```
+
+**VuTeCo will be available on PyPI in the future to simplify this step.**
+
+## Install from Source
+
+If you want to build VuTeCo locally, clone this repository and move into the `vuteco/` directory:
 
 ```sh
 cd vuteco/
@@ -65,7 +89,7 @@ Install the required dependencies in the virtual environment (can take some minu
 python -m pip install -e .
 ```
 
-After this, VuTeCo can be run with the command `vuteco`, which is equivalent to `python -m vuteco.main.cli` (you can choose any).
+After this, VuTeCo can be run with the command `vuteco`, which is equivalent to `python -m vuteco.main.cli` (you can choose any). This command is usable as long as the virtual environment remains active.
 
 ## Troubleshooting
 
