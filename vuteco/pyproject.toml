@@ -122,7 +122,7 @@ dependencies = [
 ]
 
 [project.scripts]
-vuteco = "vuteco.cli:main"
+vuteco = "main.cli:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

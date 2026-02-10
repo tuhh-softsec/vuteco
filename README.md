@@ -65,7 +65,7 @@ Install the required dependencies in the virtual environment (can take some minu
 python -m pip install -e .
 ```
 
-After this, VuTeCo can be run with the command `vuteco`, which is equivalent to `python -m vuteco.cli` (you can choose any).
+After this, VuTeCo can be run with the command `vuteco`, which is equivalent to `python -m main.cli` (you can choose any).
 
 ## Troubleshooting
 
