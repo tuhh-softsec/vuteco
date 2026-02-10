@@ -4,7 +4,7 @@ from argparse import ArgumentParser, BooleanOptionalAction, Namespace
 from collections.abc import Callable
 from typing import Union
 
-from cli_constants import LM_FINDER_MODELS, LM_LINKER_MODELS, NN_E2E_MODELS, NN_FINDER_MODELS, NN_LINKER_MODELS
+from common.cli_constants import LM_FINDER_MODELS, LM_LINKER_MODELS, NN_E2E_MODELS, NN_FINDER_MODELS, NN_LINKER_MODELS
 from common.augment_data import AugmentationApproach
 from common.constants import (DATA_DIRPATH, RAW_FILENAME, VUL4J_TEST_FILEPATH,
                               VUTECO_KB_FILEPATH, End2EndName, FinderName,

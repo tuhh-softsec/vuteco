@@ -6,7 +6,7 @@ from argparse import ArgumentParser
 from typing import Optional
 
 import pandas as pd
-from cli_constants import (VUTECO_LM_E2E_TECHNIQUES, VUTECO_LM_FL_TECHNIQUES,
+from common.cli_constants import (VUTECO_LM_E2E_TECHNIQUES, VUTECO_LM_FL_TECHNIQUES,
                            VUTECO_LM_FND_TECHNIQUES, VUTECO_NN_E2E_TECHNIQUES,
                            VUTECO_NN_FL_TECHNIQUES, VUTECO_NN_FND_TECHNIQUES)
 from common.cli_args import add_tool_args
@@ -134,7 +134,7 @@ def inspect_revision(reponame: str,
     return revision_output
 
 
-if __name__ == "__main__":
+def main():
     # TODO (Later) Add the support for one project input (i.e., one line of the input file)
     if not sys.stdout.isatty():
         os.environ["TQDM_DISABLE"] = "1"
@@ -315,3 +315,7 @@ if __name__ == "__main__":
                     os.makedirs(org_output_dirpath, exist_ok=True)
                     with open(project_output_filepath, "w") as fout:
                         json.dump(project_results, fout, indent=2, cls=CommitEncoder)
+
+
+if __name__ == "__main__":
+    main()

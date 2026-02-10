@@ -5,7 +5,7 @@ from argparse import ArgumentParser
 
 import datasets
 import numpy as np
-from cli_constants import LM_E2E_MODELS, NN_E2E_MODELS
+from common.cli_constants import LM_E2E_MODELS, NN_E2E_MODELS
 from common import global_vars
 from common.args_to_config import get_lm_e2e_config, get_nn_e2e_config
 from common.cli_args import add_base_args, add_config_args

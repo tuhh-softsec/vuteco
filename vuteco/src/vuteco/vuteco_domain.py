@@ -3,7 +3,7 @@ import os
 from abc import ABC
 
 import git
-from cli_constants import (LM_E2E_MODELS, LM_FINDER_MODELS, LM_FL_MODELS,
+from common.cli_constants import (LM_E2E_MODELS, LM_FINDER_MODELS, LM_FL_MODELS,
                            NN_E2E_MODELS, NN_FINDER_MODELS, NN_FL_MODELS,
                            VUTECO_LM_E2E_TECHNIQUES, VUTECO_LM_FL_TECHNIQUES,
                            VUTECO_LM_FND_TECHNIQUES, VUTECO_NN_E2E_TECHNIQUES,

@@ -5,7 +5,7 @@ import sys
 from argparse import ArgumentParser
 
 import datasets
-from cli_constants import (LM_FINDER_MODELS, LM_LINKER_MODELS,
+from common.cli_constants import (LM_FINDER_MODELS, LM_LINKER_MODELS,
                            NN_FINDER_MODELS, NN_LINKER_MODELS)
 from common import global_vars
 from common.args_to_config import (get_grep_fnd_experiment_configs,

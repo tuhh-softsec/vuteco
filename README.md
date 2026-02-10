@@ -8,46 +8,80 @@ If you are looking for the MSR'26 version of VuTeCo, please see the [Zenodo pack
 
 If you are looking for the dataset **Test4Vul**, containing some manually-validated tests found in the wild by VuTeCo, please see https://github.com/tuhh-softsec/test4vul.
 
+# Table of Contents
+1. [Requirements](#requirements)
+2. [Installation](#install)
+3. [Running VuTeCo](#running)
+4. [Supported Models](#models)
+5. [How to Extend VuTeCo with a new Model/Technique](#extend)
+6. [Future Work](#future)
+
 # Requirements
 
-To run VuTeCo, you need the following requirements:
+<a name="requirements"></a>
+
+These are the base requirements to run VuTeCo:
 
 - Python 3.10.0
 - Java 8+
 - A **stable Internet connection** (e.g., for downloading the Python packages and cloning remote repositories during inference).
 
-VuTeCo has been used on a Linux-based OS so far. Nevertheless, the scripts were implemented to be OS-agnostic, so they should also work on MacOS or Windows.
+VuTeCo has been tested on a Linux-based OS so far. Nevertheless, the scripts were implemented to be OS-agnostic, so they should also work on MacOS or Windows.
 
 **NOTES**:
-- The following commands assume that `python` is the default alias for the selected Python installation. It can be changed to `python3` without issues.
-- The `XX` indicates the acronym of an AI model. See [below](#models) for details.
-- The meaning of all command-line arguments can be found in the file `scripts/common/cli_args.py`.
+- The following commands assumes that `python` is the default alias for the selected Python installation. You can change to `python3` without issues.
+- The `XX` indicate the [acronym](#acronyms) of an AI model supported in VuTeCo.
+- The description of all command-line arguments can be found in the file `vuteco/common/cli_args.py`.
 
-# Set Up
+# Installation
 
-Move into the `scripts/` directory:
+<a name="install"></a>
+
+Ensure to have sufficient space to host the packages downloaded from PyPI (roughly 7 GB).
+- This setup will be improved in the future to avoid installing unneeded dependencies if one wants to use VuTeCo without the training-evaluation pipeline.
+
+Move into the `vuteco/` directory:
 
 ```sh
-cd scripts/
+cd vuteco/
 ```
 
-If this is the first use of VuTeCo, create the virtual environment, activate it, and install all the required dependencies in the virtual environment (can take some minutes):
+If this is the first use of this package, create the virtual environment and activate it.
 
 ```sh
 python -m venv ./venv
 source venv/bin/activate
-python -m pip install -r requirements.txt
 ```
+
+Ensure the right version of `setuptools` and and up to date version of `wheel`. Note that a too recent version of `setuptools` (`>=82.0.0`) may have problem with some dependencies still using `pkg_resources` (they will be replaced in the future):
+
+```sh
+python -m pip install --upgrade pip "setuptools<81.0.0" wheel
+```
+
+Install the required dependencies in the virtual environment (can take some minutes), as listed in `pyproject.toml`:
+
+```sh
+python -m pip install -e .
+```
+
+After this, VuTeCo can be run with the command `vuteco`, which is equivalent to `python -m vuteco.cli` (you can choose any).
 
 ## Troubleshooting
 
-If packages like `halo` or `ares` are complaining because of `wheel`, run this and try again:
+If you get unexpected problems caused by dependencies, use the pinned versions listed in `requirements.txt`
 
 ```sh
-pip install --upgrade pip setuptools wheel
+python -m pip install -r requirements.txt
 ```
 
-If `requirements.txt` has this line `pkg_resources==0.0.0`, remove it.
+If `requirements.txt` happens to have the line `pkg_resources==0.0.0`, remove it.
+
+If packages like `halo` or `ares` are raising issues because of `wheel`, run this and try again:
+
+```sh
+python -m pip install --upgrade pip "setuptools<81.0.0" wheel
+```
 
 Unsloth could give problems with dependencies. Try to ensure always the latest version directly from the repository if the one in the `requirements.txt` is giving issues:
 
@@ -55,12 +89,11 @@ Unsloth could give problems with dependencies. Try to ensure always the latest v
 python -m pip uninstall unsloth unsloth-zoo -y && python -m pip install --upgrade --no-cache-dir --no-deps git+https://github.com/unslothai/unsloth.git git+https://github.com/unslothai/unsloth-zoo.gi
 ```
 
-Ensure to have additional space to host the packages downloaded from PyPI (roughly 7 GB).
-- This setup will be improved in the future to avoid installing unneeded dependencies if one wants to use VuTeCo without the training-evaluation pipeline.
-
 # Running VuTeCo
 
-The main script for running VuTeCo is `vuteco.py`. It accepts the following arguments (see the complete description in [this file](https://github.com/tuhh-softsec/vuteco/blob/main/scripts/cli_args.py#400)).
+<a name="running"></a>
+
+The command to run VuTeCo is `vuteco`, which points to `vuteco/vuteco/cli.py`. The arguments it accepts are described in file `vuteco/common/cli_args.py`.
 
 VuTeCo can be run in two modes:
 - **Finding**: it predicts whether all the JUnit test methods found in a given project repository are security-related (returns a probability).
@@ -68,7 +101,8 @@ VuTeCo can be run in two modes:
 
 The user can interpret the predicted probabilities freely (the tool per se does not classify, but only return probabilities). The recommended threshold for the positive classifications is the default 0.5.
 
-The input projects to analyze can be supplied through the command-line argument `-i` (see [this example](`examples/input.csv`) as guidance). The output is returned as JSON files, one per project analyzed, and put in the directory indicated by the command-line argument `-o`. Make sure the directory does not exist or is empty so it does not clash with your existing files.
+The input projects to analyze can be supplied through the command-line argument `-i` (see [this example](`examples/input.csv`) as a guidance). The output is returned as JSON files, one per project analyzed, and placed in the directory indicated by the command-line argument `-o`.
+- Make sure the directory does not exist or is empty so it does not clash with your existing files.
 
 The AI model to use can be set with the argument `-t`. The list of supported models is reported [below](#models).
 - In Finding mode, the recommended model is `uxc` (UniXcoder);
@@ -79,13 +113,13 @@ The AI model to use can be set with the argument `-t`. The list of supported mod
 VuTeCo can be called in Finding mode in this way (with model `uxc`):
 
 ```sh
-python vuteco.py -i <PROJECT-LIST> -o <OUTPUT-DIRECTORY> -r from-file --no-vuln-match --skip-inspected-projects -t uxc
+vuteco -i <PROJECT-LIST-FILE> -o <OUTPUT-DIRECTORY> -r from-file --no-vuln-match --skip-inspected-projects -t uxc
 ```
 
 VuTeCo can be called in Matching mode in this way (with model `dsc`):
 
 ```sh
-python vuteco.py -i <PROJECT-LIST> -o <OUTPUT-DIRECTORY> -r from-file --no-vuln-find --skip-inspected-projects -t dsc
+vuteco -i <PROJECT-LIST-FILE> -o <OUTPUT-DIRECTORY> -r from-file --no-vuln-find --skip-inspected-projects -t dsc
 ```
 
 ## Troubleshooting
@@ -109,6 +143,8 @@ VuTeCo automatically downloads the weights for the Finding and Matching models f
 | qc | Qwen Coder |
 
 # How to Extend VuTeCo with a new Model/Technique
+
+<a name="extend"></a>
 
 This guide explains how to add a new model or technique to **VuTeCo**. This guide will be further improved in the future.
 
