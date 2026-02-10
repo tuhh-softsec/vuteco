@@ -31,7 +31,7 @@ VuTeCo has been tested on a Linux-based OS so far. Nevertheless, the scripts wer
 **NOTES**:
 - The following commands assumes that `python` is the default alias for the selected Python installation. You can change to `python3` without issues.
 - The `XX` indicate the [acronym](#acronyms) of an AI model supported in VuTeCo.
-- The description of all command-line arguments can be found in the file `vuteco/common/cli_args.py`.
+- The description of all command-line arguments can be found in the file `vuteco/src/common/cli_args.py`.
 
 # Installation
 
@@ -93,7 +93,7 @@ python -m pip uninstall unsloth unsloth-zoo -y && python -m pip install --upgrad
 
 <a name="running"></a>
 
-The command to run VuTeCo is `vuteco`, which points to `vuteco/vuteco/cli.py`. The arguments it accepts are described in file `vuteco/common/cli_args.py`.
+The command to run VuTeCo is `vuteco`, which points to `vuteco/src/vuteco/cli.py`. The arguments it accepts are described in file `vuteco/src/common/cli_args.py`.
 
 VuTeCo can be run in two modes:
 - **Finding**: it predicts whether all the JUnit test methods found in a given project repository are security-related (returns a probability).
