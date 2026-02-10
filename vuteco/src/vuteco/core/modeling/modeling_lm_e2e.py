@@ -1,5 +1,5 @@
 import os
-from enum import Enum
+from enum import StrEnum
 from typing import List, Optional, Tuple, Type, Union
 
 import numpy as np
@@ -17,7 +17,7 @@ from vuteco.core.modeling.modeling_lm_lnk import (CodeLlamaLinker,
                                                   QwenCoderLinker)
 
 
-class LanguageModelE2EConfigKeys(str, Enum):
+class LanguageModelE2EConfigKeys(StrEnum):
     UNSLOTH_TRAINING = UNSLOTH_TRAINING_KEY
     ARCHI_STYLE = "archi_style"
     TRAIN_TYPE = "train_type"

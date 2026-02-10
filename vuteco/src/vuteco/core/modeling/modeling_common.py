@@ -1,6 +1,6 @@
 import os
 from collections.abc import Callable
-from enum import Enum
+from enum import StrEnum
 from typing import Optional, Union
 
 from transformers import AutoTokenizer
@@ -8,17 +8,17 @@ from transformers import AutoTokenizer
 from vuteco.core.common.constants import DEVICE
 
 
-class FinderLabel(str, Enum):
+class FinderLabel(StrEnum):
     UNKNOWN = "Unknown"
     WITNESSING = "Witnessing"
 
 
-class LinkerLabel(str, Enum):
+class LinkerLabel(StrEnum):
     NOT_LINKED = "NotLinked"
     LINKED = "Linked"
 
 
-class E2ELabel(str, Enum):
+class E2ELabel(StrEnum):
     NOT_RELATED = "NotRelated"
     RELATED = "Related"
 

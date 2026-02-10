@@ -1,6 +1,6 @@
 import json
 import os
-from enum import Enum
+from enum import StrEnum
 from typing import List, Optional, Tuple, Type, Union
 
 import numpy as np
@@ -32,7 +32,7 @@ from vuteco.core.modeling.modeling_lm_common import (extract_responses,
                                                      prepare_for_lm)
 
 
-class LanguageModelLinkerConfigKeys(str, Enum):
+class LanguageModelLinkerConfigKeys(StrEnum):
     UNSLOTH_TRAINING = UNSLOTH_TRAINING_KEY
     USE_CWE = "use_cwe"
     AUGMENT_TECH = "augment_technique"

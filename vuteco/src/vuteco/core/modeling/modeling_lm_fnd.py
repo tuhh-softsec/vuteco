@@ -1,5 +1,5 @@
 import os
-from enum import Enum
+from enum import StrEnum
 from typing import List, Optional, Tuple, Type, Union
 
 from vuteco.core.common import global_vars
@@ -30,7 +30,7 @@ from vuteco.core.modeling.modeling_lm_common import (extract_responses,
                                                      prepare_for_lm)
 
 
-class LanguageModelFinderConfigKeys(str, Enum):
+class LanguageModelFinderConfigKeys(StrEnum):
     UNSLOTH_TRAINING = UNSLOTH_TRAINING_KEY
     AUGMENT_TECH = "augment_technique"
     # LOSS = "loss"

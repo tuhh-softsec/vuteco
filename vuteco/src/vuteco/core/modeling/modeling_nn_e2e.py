@@ -1,6 +1,6 @@
 import os
 from dataclasses import dataclass
-from enum import Enum
+from enum import StrEnum
 from statistics import mean
 from typing import List, Optional, Tuple, Type, Union
 
@@ -38,7 +38,7 @@ from vuteco.core.modeling.modeling_nn_lnk import (CodeBertLinker,
                                                   UniXCoderLinker)
 
 
-class NeuralNetworkE2EConfigKeys(str, Enum):
+class NeuralNetworkE2EConfigKeys(StrEnum):
     ARCHI_STYLE = "archi_style"
     SUSPECT_THRESHOLD = "suspect_threshold"
     TRAIN_TYPE = "train_type"

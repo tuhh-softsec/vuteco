@@ -1,6 +1,6 @@
 import os
 from dataclasses import dataclass
-from enum import Enum
+from enum import StrEnum
 from typing import List, Optional, Tuple, Type, Union
 
 import torch
@@ -24,7 +24,7 @@ from vuteco.core.modeling.modeling_nn_common import (
     cls_embeddings, mean_pooling, unixcoder_sentence_embeddings)
 
 
-class NeuralNetworkLinkerConfigKeys(str, Enum):
+class NeuralNetworkLinkerConfigKeys(StrEnum):
     MERGE = "merge"
     USE_CWE = "use_cwe"
     AUGMENT_TECH = "augment_technique"

@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "vuteco"
 version = "0.1.0"
-requires-python = "~=3.10.0"
+requires-python = "~=3.11.0"
 dependencies = [
     "accelerate~=1.6.0",
     "aiohappyeyeballs~=2.6.1",

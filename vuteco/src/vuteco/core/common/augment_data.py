@@ -2,7 +2,7 @@ import os
 import re
 import subprocess
 import tempfile
-from enum import Enum
+from enum import StrEnum
 from random import randint, seed
 from typing import Union
 
@@ -19,7 +19,7 @@ from vuteco.core.common.constants import (DETERMINISM, JT_COMMAND,
 from vuteco.core.common.utils_training import print_stdout_file
 
 
-class AugmentationApproach(str, Enum):
+class AugmentationApproach(StrEnum):
     NONE = "none"
     JT = "jt"
     SPAT = "spat"

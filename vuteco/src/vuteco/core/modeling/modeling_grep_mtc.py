@@ -2,7 +2,7 @@ import json
 import os
 import re
 import string
-from enum import Enum
+from enum import StrEnum
 from typing import Optional
 
 import nltk
@@ -11,7 +11,7 @@ from nltk.corpus import stopwords
 from vuteco.core.common.constants import CONFIG_JSON
 
 
-class GrepMatcherConfigKeys(str, Enum):
+class GrepMatcherConfigKeys(StrEnum):
     MATCHES = "matches"
     EXTENDED = "extended"
 

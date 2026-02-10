@@ -2,7 +2,7 @@ import json
 import os
 from collections import Counter
 from collections.abc import Iterable
-from enum import Enum
+from enum import StrEnum
 
 import yake
 
@@ -10,7 +10,7 @@ from vuteco.core.common.constants import CONFIG_JSON, NAMES_JSON
 from vuteco.core.common.utils_mining import extract_identifiers
 
 
-class VocabularyFinderConfigKeys(str, Enum):
+class VocabularyFinderConfigKeys(StrEnum):
     EXTRACTOR = "extractor"
     MATCHES = "matches"
     SEPARATE = "separate"

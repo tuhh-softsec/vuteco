@@ -1,14 +1,14 @@
 import json
 import os
 import re
-from enum import Enum
+from enum import StrEnum
 from typing import Optional
 
 from vuteco.core.common.constants import (CONFIG_JSON, EXACT_PATTERN_FILEPATH,
                                           SUBSTRING_EXT_PATTERN_FILEPATH)
 
 
-class GrepFinderConfigKeys(str, Enum):
+class GrepFinderConfigKeys(StrEnum):
     MATCHES = "matches"
     EXTENDED = "extended"
 

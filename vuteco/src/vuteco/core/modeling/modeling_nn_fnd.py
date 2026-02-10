@@ -1,5 +1,5 @@
 import os
-from enum import Enum
+from enum import StrEnum
 from typing import List, Optional, Type, Union
 
 import torch
@@ -16,7 +16,7 @@ from vuteco.core.modeling.modeling_nn_common import (
     cls_embeddings, mean_pooling, unixcoder_sentence_embeddings)
 
 
-class NeuralNetworkFinderConfigKeys(str, Enum):
+class NeuralNetworkFinderConfigKeys(StrEnum):
     AUGMENT_TECH = "augment_technique"
     LOSS = "loss"
     ONE_LINE = "one_line"

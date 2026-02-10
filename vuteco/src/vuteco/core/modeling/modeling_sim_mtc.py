@@ -1,6 +1,6 @@
 import json
 import os
-from enum import Enum
+from enum import StrEnum
 from typing import Union
 
 import torch
@@ -16,7 +16,7 @@ from vuteco.core.modeling.modeling_nn_common import (
     mean_pooling, unixcoder_sentence_embeddings)
 
 
-class SimilarityMatcherConfigKeys(str, Enum):
+class SimilarityMatcherConfigKeys(StrEnum):
     EXTRACTOR = "extractor"
     THRESHOLD = "threshold"
     DEDUP = "dedup"

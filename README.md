@@ -22,7 +22,7 @@ If you are looking for the dataset **Test4Vul**, containing some manually-valida
 
 These are the base requirements to run VuTeCo:
 
-- Python 3.10.0
+- Python 3.11
 - Java 8+
 - A **stable Internet connection** (e.g., for downloading the Python packages and cloning remote repositories during inference).
 

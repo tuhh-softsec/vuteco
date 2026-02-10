@@ -1,10 +1,10 @@
 import os
-from enum import Enum
+from enum import StrEnum
 
 import torch
 
 
-class FinderName(str, Enum):
+class FinderName(StrEnum):
     # Given a test case, determine if it's witnessing (different principles)
     CODEBERT_FND = "cb-fnd"
     CODET5PLUS_FND = "ct5p-fnd"
@@ -17,12 +17,12 @@ class FinderName(str, Enum):
     FIX_FND = "fix-fnd"
 
 
-class HeuristicName(str, Enum):
+class HeuristicName(StrEnum):
     # Given a set of fix commits, extract the changed and added tests
     FIX_HEU = "fix-heu"
 
 
-class LinkerName(str, Enum):
+class LinkerName(StrEnum):
     # Given a witnessing test and a description of a vuln, determine if related
     CODEBERT_LNK = "cb-lnk"
     CODET5PLUS_LNK = "ct5p-lnk"
@@ -35,7 +35,7 @@ class LinkerName(str, Enum):
     SIM_LNK = "sim-lnk"
 
 
-class End2EndName(str, Enum):
+class End2EndName(StrEnum):
     # Given a test case and a description of a vuln, determine if related
     CODEBERT_E2E = "cb-e2e"
     CODET5PLUS_E2E = "ct5p-e2e"
@@ -49,7 +49,7 @@ class End2EndName(str, Enum):
     FIX_E2E = "fix-e2e"
 
 
-class FinderLinkerName(str, Enum):
+class FinderLinkerName(StrEnum):
     # Given a test case and a description of a vuln, determine if related
     CODEBERT_FL = "cb-fl"
     CODET5PLUS_FL = "ct5p-fl"
@@ -59,7 +59,7 @@ class FinderLinkerName(str, Enum):
     DEEPSEEKCODER_FL = "dsc-fl"
 
 
-class TechniqueName(str, Enum):
+class TechniqueName(StrEnum):
     CODEBERT = "cb"
     CODET5PLUS = "ct5p"
     UNIXCODER = "uxc"
@@ -71,37 +71,37 @@ class TechniqueName(str, Enum):
     FIX = "fix"
 
 
-class CommonConfigKeys(str, Enum):
+class CommonConfigKeys(StrEnum):
     SPLIT = "split"
     DATASET_SEED = "dataset_seed"
 
 
-class LossFunction(str, Enum):
+class LossFunction(StrEnum):
     BCE = "bce",
     WBCE = "wbce"
 
 
-class MergeStyle(str, Enum):
+class MergeStyle(StrEnum):
     CONCAT_TEST_DESCR = "concat-td"
     CONCAT_DESCR_TEST = "concat-dt"
     LEARN = "learn"
     JAVADOC = "jd"
 
 
-class E2EArchitectureStyle(str, Enum):
+class E2EArchitectureStyle(StrEnum):
     LINKER_ONLY = "lo"
     FINDER_LINKER_MASK = "fl-mask"
     FINDER_LINKER_META = "fl-meta"
     FINDER_LINKER_FUSE = "fl-fuse"
 
 
-class E2ETrainingType(str, Enum):
+class E2ETrainingType(StrEnum):
     PRETRAIN_ONLY = "pt"
     FINETUNE_ONLY = "ft"
     PRETRAIN_FINETUNE = "pt-ft"
 
 
-class VutecoRevisionStyle(str, Enum):
+class VutecoRevisionStyle(StrEnum):
     ALL = "all"
     HEAD = "head"
     INPUT_FILE = "from-file"

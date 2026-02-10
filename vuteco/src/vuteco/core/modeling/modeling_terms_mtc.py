@@ -1,12 +1,12 @@
 import json
 import os
-from enum import Enum
+from enum import StrEnum
 
 from vuteco.core.common.constants import CONFIG_JSON
 from vuteco.core.common.utils_mining import extract_identifiers
 
 
-class TermsMatcherConfigKeys(str, Enum):
+class TermsMatcherConfigKeys(StrEnum):
     SEPARATE = "separate"
     THRESHOLD = "threshold"
 
