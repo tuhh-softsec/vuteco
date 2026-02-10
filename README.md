@@ -60,6 +60,8 @@ If you want to install it directly with `pip`:
 pip install git+https://github.com/tuhh-softsec/vuteco.git#subdirectory=vuteco
 ```
 
+The main function to run VuTeCo directly from Python code is `vuteco.main.starter.vuteco_start()`.
+
 **VuTeCo will be available on PyPI in the future to simplify this step.**
 
 ## Install from Source
