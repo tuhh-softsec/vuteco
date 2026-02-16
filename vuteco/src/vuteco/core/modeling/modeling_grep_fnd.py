@@ -4,8 +4,9 @@ import re
 from enum import StrEnum
 from typing import Optional
 
-from vuteco.core.common.constants import (CONFIG_JSON, EXACT_PATTERN_FILEPATH,
-                                          SUBSTRING_EXT_PATTERN_FILEPATH)
+from vuteco.core.common.constants import CONFIG_JSON
+from vuteco.core.common.resources import (get_exact_patterns,
+                                          get_substring_ext_patterns)
 
 
 class GrepFinderConfigKeys(StrEnum):
@@ -24,13 +25,11 @@ class GrepFinder():
         self._matches = matches
         self._extended = extended
         self._exact_patterns = []
-        with open(SUBSTRING_EXT_PATTERN_FILEPATH) as fin:
-            self._substring_patterns = [re.compile(p, flags=re.IGNORECASE) for p in fin.read().splitlines()]
+
+        self._substring_patterns = [re.compile(p, flags=re.IGNORECASE) for p in get_substring_ext_patterns().splitlines()]
         if self._extended:
-            with open(EXACT_PATTERN_FILEPATH) as fin:
-                self._exact_patterns.extend([re.compile(f"(^|\W|_){p}($|\W|_)", flags=re.IGNORECASE) for p in fin.read().splitlines()])
-            with open(SUBSTRING_EXT_PATTERN_FILEPATH) as fin:
-                self._substring_patterns.extend([re.compile(p, flags=re.IGNORECASE) for p in fin.read().splitlines()])
+            self._exact_patterns.extend([re.compile(f"(^|\W|_){p}($|\W|_)", flags=re.IGNORECASE) for p in get_exact_patterns().splitlines()])
+            self._substring_patterns.extend([re.compile(p, flags=re.IGNORECASE) for p in get_substring_ext_patterns().splitlines()])
 
     def get_witnessing_score(self, test_code: str) -> float:
         return 1.0 if self.is_security_test(test_code) else 0.0

@@ -5,7 +5,6 @@ from collections.abc import Callable
 from typing import Union
 
 from pandas import DataFrame
-
 from vuteco.core.common.augment_data import AugmentationApproach
 from vuteco.core.common.cli_constants import (LM_FINDER_MODELS,
                                               LM_LINKER_MODELS, NN_E2E_MODELS,
@@ -13,7 +12,6 @@ from vuteco.core.common.cli_constants import (LM_FINDER_MODELS,
                                               NN_LINKER_MODELS)
 from vuteco.core.common.constants import (DATA_DIRPATH, RAW_FILENAME,
                                           VUL4J_TEST_FILEPATH,
-                                          VUTECO_KB_FILEPATH,
                                           E2EArchitectureStyle,
                                           E2ETrainingType, End2EndName,
                                           FinderName, HeuristicName,
@@ -502,7 +500,7 @@ TOOL_ARGS = {
     "knowledge-base": {
         "names": ["-kb", "--knowledge-base"],
         "props": {
-            "help": f'Path to a JSON file containing additional info about known vulnerabilities that will temporary update the standard knowledge base in VUTECO, that is, adding new entires and overwriting existing ones. The file must have some vulnerability IDs as keys. An example of the structure to follow is in file {VUTECO_KB_FILEPATH}.'
+            "help": f'Path to a JSON file containing additional info about known vulnerabilities that will temporary update the standard knowledge base in VUTECO, that is, adding new entires and overwriting existing ones. The file must have some vulnerability IDs as keys.'
         }
     }
 }

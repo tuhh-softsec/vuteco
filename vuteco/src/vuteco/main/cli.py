@@ -13,8 +13,8 @@ from vuteco.core.common.cli_constants import (VUTECO_LM_E2E_TECHNIQUES,
                                               VUTECO_NN_FL_TECHNIQUES,
                                               VUTECO_NN_FND_TECHNIQUES)
 from vuteco.core.common.constants import (REMOTE_BASEPATH,
-                                          TRAINED_MODEL_DIRPATH,
-                                          VUTECO_KB_FILEPATH, TechniqueName)
+                                          TRAINED_MODEL_DIRPATH, TechniqueName)
+from vuteco.core.common.resources import get_vuln_kb
 from vuteco.main.starter import vuteco_start
 from vuteco.main.vuteco_domain import (VutecoFixCommit, VutecoGrepFinder,
                                        VutecoGrepMatcher,
@@ -101,8 +101,7 @@ def main():
         local_load = False
     techniques = prepare_techniques(args.techniques.split(","), model_dirpath, vuln_matching=vuln_matching, e2e_enabled=e2e_enabled, local_load=local_load)
 
-    with open(VUTECO_KB_FILEPATH) as fin:
-        knowledge_base: dict = json.load(fin)
+    knowledge_base: dict = get_vuln_kb()
     if args.knowledge_base:
         with open(args.knowledge_base) as fin:
             extra_kb = json.load(fin)

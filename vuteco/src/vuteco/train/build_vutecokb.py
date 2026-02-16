@@ -6,14 +6,13 @@ import yaml
 from git import Repo
 from halo import Halo
 from tqdm import tqdm
-
 from vuteco.core.common.constants import (PROJECT_KB_FILEPATH,
                                           PROJECT_KB_REPO_DIRPATH,
                                           PROJECT_KB_URL, PROJECTKB_BRANCH,
                                           REEF_KB_FILEPATH, REEF_RAW_FILEPATH,
                                           REPOSVUL_KB_FILEPATH,
-                                          REPOSVUL_RAW_FILEPATH,
-                                          VUTECO_KB_FILEPATH)
+                                          REPOSVUL_RAW_FILEPATH)
+from vuteco.core.common.resources import get_vuln_kb_path
 from vuteco.core.common.utils_mining import (get_cve_descr_date, get_cwe_info,
                                              get_cwe_name, normalize_repo_url)
 
@@ -163,5 +162,5 @@ if __name__ == "__main__":
     # TODO Add CVEFixes? It's an SQL DB to query... maybe later
     vuteco_kb = merge_kbs(project_kb, reef_kb)
     vuteco_kb = merge_kbs(vuteco_kb, reposvul_kb)
-    with open(VUTECO_KB_FILEPATH, "w") as fout:
+    with open(get_vuln_kb_path(), "w") as fout:
         json.dump(vuteco_kb, fout, indent=2)
