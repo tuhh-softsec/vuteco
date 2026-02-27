@@ -6,7 +6,6 @@ import torch
 from transformers import (AutoTokenizer, PretrainedConfig, PreTrainedModel,
                           RobertaModel, T5EncoderModel)
 from transformers.modeling_outputs import SequenceClassifierOutput
-
 from vuteco.core.common.constants import DEVICE, TEXT_COL, LossFunction
 from vuteco.core.common.utils_training import one_line_text
 from vuteco.core.modeling.modeling_common import (FinderLabel,
@@ -152,8 +151,11 @@ class NeuralNetworkFinder(PreTrainedModel):
         ready_test_code = one_line_text(test_code) if self.must_one_line_text() else test_code
         return self._call_tokenizer(ready_test_code, truncate=truncate)
 
-    def get_witnessing_score(self, test_code: str) -> float:
-        model_input = self.encode_single(test_code)
+    def get_witnessing_score(self, test_code: Union[str, list[str]]) -> float:
+        if isinstance(test_code, list):
+            model_input = self.encode_batch({TEXT_COL: test_code})
+        else:
+            model_input = self.encode_single(test_code)
         self.eval()
         with torch.inference_mode():
             model_input = {n: model_input[n].to(DEVICE) if n in model_input else None for n in self.tokenizer.model_input_names}
@@ -162,8 +164,10 @@ class NeuralNetworkFinder(PreTrainedModel):
             model_output = self(**model_input)
             logits: torch.Tensor = model_output.logits
         probs = torch.nn.functional.softmax(logits, dim=-1)
-        related_prob = float(probs[0, self.config.label2id[FinderLabel.WITNESSING]].item())
-        return related_prob
+        related_probs = [float(p) for p in probs[:, self.config.label2id[FinderLabel.WITNESSING]].tolist()]
+        if len(related_probs) == 1:
+            return related_probs[0]
+        return related_probs
 
     def save_pretrained(self, save_directory: Union[str, os.PathLike], **kwargs):
         super().save_pretrained(save_directory, **kwargs)

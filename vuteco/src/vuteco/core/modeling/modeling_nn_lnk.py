@@ -8,7 +8,6 @@ from transformers import (AutoTokenizer, PretrainedConfig, PreTrainedModel,
                           RobertaModel, T5EncoderModel)
 from transformers.activations import gelu
 from transformers.modeling_outputs import SequenceClassifierOutput
-
 from vuteco.core.common.constants import (ATTENTION_MASK, ATTENTION_MASK_1,
                                           ATTENTION_MASK_2, DEVICE, INPUT_IDS,
                                           INPUT_IDS_1, INPUT_IDS_2,
@@ -303,8 +302,11 @@ class NeuralNetworkLinker(PreTrainedModel):
         right = ready_vuln if self.must_concat_test_first() else ready_test_code
         return self._call_tokenizer(text_1=left, text_2=right, truncate=truncate)
 
-    def get_relation_score(self, test_code: str, vuln: str) -> float:
-        model_input = self.encode_single(test_code, vuln)
+    def get_relation_score(self, test_code: Union[str, list[str]], vuln: Union[str, list[str]]) -> float:
+        if isinstance(test_code, list) and isinstance(vuln, list):
+            model_input = self.encode_batch({TEXT_1_COL: test_code, TEXT_2_COL: vuln})
+        else:
+            model_input = self.encode_single(test_code, vuln)
         self.eval()
         with torch.inference_mode():
             model_input = {n: model_input[n].to(DEVICE) if n in model_input else None for n in self.tokenizer.model_input_names}
@@ -313,8 +315,10 @@ class NeuralNetworkLinker(PreTrainedModel):
             model_output = self(**model_input)
             logits: torch.Tensor = model_output.logits
         probs = torch.nn.functional.softmax(logits, dim=-1)
-        related_prob = float(probs[0, self.config.label2id[LinkerLabel.LINKED]].item())
-        return related_prob
+        related_probs = [float(p) for p in probs[:, self.config.label2id[LinkerLabel.LINKED]].tolist()]
+        if len(related_probs) == 1:
+            return related_probs[0]
+        return related_probs
 
     def save_pretrained(self, save_directory: Union[str, os.PathLike], **kwargs):
         super().save_pretrained(save_directory, **kwargs)
