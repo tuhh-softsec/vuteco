@@ -151,7 +151,7 @@ class NeuralNetworkFinder(PreTrainedModel):
         ready_test_code = one_line_text(test_code) if self.must_one_line_text() else test_code
         return self._call_tokenizer(ready_test_code, truncate=truncate)
 
-    def get_witnessing_score(self, test_code: Union[str, list[str]]) -> float:
+    def get_witnessing_score(self, test_code: Union[str, list[str]]) -> Union[float, list[float]]:
         if isinstance(test_code, list):
             model_input = self.encode_batch({TEXT_COL: test_code})
         else:
@@ -165,7 +165,7 @@ class NeuralNetworkFinder(PreTrainedModel):
             logits: torch.Tensor = model_output.logits
         probs = torch.nn.functional.softmax(logits, dim=-1)
         related_probs = [float(p) for p in probs[:, self.config.label2id[FinderLabel.WITNESSING]].tolist()]
-        if len(related_probs) == 1:
+        if not isinstance(test_code, list):
             return related_probs[0]
         return related_probs
 

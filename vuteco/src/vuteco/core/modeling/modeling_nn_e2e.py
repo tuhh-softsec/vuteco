@@ -408,7 +408,7 @@ class NeuralNetworkE2E(PreTrainedModel):
             **lnk_part
         }
 
-    def get_relation_score(self, test_code: Union[str, list[str]], vuln: Union[str, list[str]]) -> float:
+    def get_relation_score(self, test_code: Union[str, list[str]], vuln: Union[str, list[str]]) -> Union[float, list[float]]:
         if isinstance(test_code, list) and isinstance(vuln, list):
             model_input = self.encode_batch({TEXT_1_COL: test_code, TEXT_2_COL: vuln})
         else:
@@ -422,7 +422,7 @@ class NeuralNetworkE2E(PreTrainedModel):
             logits: torch.Tensor = model_output.logits
         probs = torch.nn.functional.softmax(logits, dim=-1)
         related_probs = [float(p) for p in probs[:, self.config.label2id[E2ELabel.RELATED]].tolist()]
-        if len(related_probs) == 1:
+        if not isinstance(test_code, list):
             return related_probs[0]
         return related_probs
 
