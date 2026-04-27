@@ -5,9 +5,9 @@ import re
 import git
 import javalang as jl
 from cwe2.database import Database
+from git.objects import Blob
 from pycvesearch import CVESearch
 from tqdm import tqdm
-
 from vuteco.core.common.constants import CODE_COL
 
 CVE_SEARCH = CVESearch("https://cve.circl.lu")
@@ -36,6 +36,11 @@ JUNIT_FIXTURE_ANNOTATIONS = [
 def retrieve_tests_from_file(filepath: str) -> list:
     with open(filepath, errors="ignore") as fin:
         read_jf = fin.read()
+    return retrieve_tests_from_class(read_jf)
+
+
+def retrieve_tests_from_file_obj(file_obj: Blob) -> list:
+    read_jf = file_obj.data_stream.read().decode("utf-8", "ignore")
     return retrieve_tests_from_class(read_jf)
 
 
@@ -182,8 +187,8 @@ def get_method_text_broken(method_node: jl.ast.Node, tree: list, codelines: list
         return meth_text, (startline_index + 1), (last_endline_index + 1)
 
 
-def get_java_files_in_revision(revision: git.Commit) -> list[str]:
-    return [a.abspath for a in revision.tree.list_traverse() if ".java" in a.abspath]
+def get_java_files_in_revision(revision: git.Commit) -> list[Blob]:
+    return [a for a in revision.tree.list_traverse() if ".java" in a.abspath]
 
 
 def get_current_file_names_touched_in(revisions: list[git.Commit]) -> list[str]:
@@ -216,13 +221,12 @@ def collect_tests_in_revision(revision: git.Commit, print_unreadable_files: bool
     java_files = get_java_files_in_revision(revision)
     if len(java_files) == 0:
         return all_tests
-    for jf_path in tqdm(java_files, desc=f"  - Collecting test methods in Java files"):
-        jf_relpath = os.path.relpath(jf_path, revision.repo.working_dir)
+    for java_file_obj in tqdm(java_files, desc=f"  - Collecting test methods in Java files"):
         try:
-            tests = retrieve_tests_from_file(jf_path)
+            tests = retrieve_tests_from_file_obj(java_file_obj)
         except:
             if print_unreadable_files:
-                print(f"Failed to read file {jf_path}. Skipping it.")
+                print(f"Failed to read file {java_file_obj}. Skipping it.")
             continue
         for jf_cu, class_node, tm_node, test_code in tests:
             class_fqn = get_class_fqn(jf_cu, class_node)
@@ -233,7 +237,7 @@ def collect_tests_in_revision(revision: git.Commit, print_unreadable_files: bool
             #    with open(dest_file, 'w') as fout:
             #        fout.write(test_code)
             test_dict = {
-                "file": jf_relpath,
+                "file": os.path.relpath(java_file_obj.abspath, revision.repo.working_dir),
                 "class": class_fqn,
                 "method": tm_node.name,
                 CODE_COL: test_code,
