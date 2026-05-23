@@ -1,5 +1,11 @@
 # VuTeCo - AI-driven Collector of Vulnerability-witnessing Tests
 
+[![arXiv](https://img.shields.io/badge/arXiv-2502.03365-b31b1b.svg)](https://arxiv.org/abs/2502.03365)
+[![Model](https://img.shields.io/badge/Hugging%20Face-Model-yellow?logo=huggingface)](https://huggingface.co/emaiannone/models?search=vuteco)
+[![DOI](https://img.shields.io/badge/DOI-Zenodo-blue)](https://doi.org/10.5281/zenodo.18258566)
+
+---
+
 This repository contains the maintained source code of **VuTeCo** (VUlnerability TEst COllector), which can scan Java Git repositories to (1) find security-related test cases and (2) match them with CVE identifiers.
 
 Please, see the [MSR'26 paper](https://arxiv.org/abs/2502.03365) for more details about its inner workings.
